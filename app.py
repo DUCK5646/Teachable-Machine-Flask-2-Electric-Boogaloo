@@ -15,17 +15,6 @@ def contact():
 @app.route('/products')
 def product():
     return render_template("product.html")
-@app.route('/confirmation')
-def confirmation():
-    name = request.args.get("name")
-    email = request.args.get("email")
-    props = {
-        "name": name,
-        "email": email
-
-    }
-    return render_template( "confirmation.html", data=props)
-
 
 if __name__ == '__main__':
     app.run(debug=True)
