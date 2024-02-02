@@ -1,90 +1,52 @@
-// Copyright (c) 2019 ml5
-//
-// This software is released under the MIT License.
-// https://opensource.org/licenses/MIT
+<div>Teachable Machine Audio Model - p5.js and ml5.js </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/p5.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/addons/p5.dom.min.js"></script>
+<script src="https://unpkg.com/ml5@latest/dist/ml5.min.js"></script>
 
-/* ===
-ml5 Example
-Webcam Image Classification using a pre-trained customized model and p5.js
-This example uses p5 preload function to create the classifier
-=== */
-
-// Classifier Variable
+<script type="text/javascript">
+  // Global variable to store the classifier
 let classifier;
-// Model URL
-let imageModelURL = 'https://teachablemachine.withgoogle.com/models/9Lvi8yQQr/';
+
+// Label
+let label = 'listening...';
+let confidence = 0;
+
+// Teachable Machine model URL:
+let soundModel = 'https://teachablemachine.withgoogle.com/models/o4CVgbEYu/';
 
 
-// Video
-let video;
-let flippedVideo;
-// To store the classification
-let label = "";
-
-// Load the model first
 function preload() {
-  classifier = ml5.imageClassifier(imageModelURL + 'model.json');
+  // Load the model
+  classifier = ml5.soundClassifier(soundModel + 'model.json');
 }
 
 function setup() {
-  createCanvas(320, 260);
-  // Create the video
-  video = createCapture(VIDEO);
-  video.size(320, 240);
-  video.hide();
-
-  flippedVideo = ml5.flipImage(video)
+  createCanvas(320, 240);
   // Start classifying
-  classifyVideo();
+  // The sound model will continuously listen to the microphone
+  classifier.classify(gotResult);
 }
 
 function draw() {
-  background(0);
-  // Draw the video
-  image(flippedVideo, 0, 0);
-
-  // Draw the label
-  fill(255);
-  textSize(16);
-  textAlign(CENTER);
-  text(label, width / 2, height - 4);
+  background(255);
+  // Draw the label in the canvas
+  fill(0);
+  textSize(30);
+  textAlign(CENTER, CENTER);
+  text('This clip is: ' + (confidence * 100).toFixed(2) + '% Similar to "blank" ', width / 2, height / 2 + 20);
 }
 
-// Get a prediction for the current video frame
-function classifyVideo() {
-  flippedVideo = ml5.flipImage(video)
-  classifier.classify(flippedVideo, gotResult);
 
-}
-
-// When we get a result
+// The model recognizing a sound will trigger this event
 function gotResult(error, results) {
-  // If there is an error
   if (error) {
     console.error(error);
     return;
   }
   // The results are in an array ordered by confidence.
-  console.log(results[0]);
+  // console.log(results[0]);
   label = results[0].label;
-if(label=="PHONE"){
- fill(200,100,250);
-  textSize(55);
-  textAlign(CENTER);
-  text(label, width / 2, height/2);
- }
-  if(label=="KEYS"){
- fill(100,200,250);
-  textSize(55);
-  textAlign(CENTER);
-  text(label, width / 2, height/2);
- }
-  if(label=="NOTHING"){
- fill(100,250,0);
-  textSize(55);
-  textAlign(CENTER);
-  text(label, width / 2, height/2);
- }
-  // Classifiy again!
-  classifyVideo();
+  confidence = results[0].confidence;
 }
+</script>
+
