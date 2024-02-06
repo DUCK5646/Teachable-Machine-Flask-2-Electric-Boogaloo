@@ -1,23 +1,38 @@
-<div>Teachable Machine Audio Model - p5.js and ml5.js </div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/p5.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/addons/p5.dom.min.js"></script>
-<script src="https://unpkg.com/ml5@latest/dist/ml5.min.js"></script>
 
-<script type="text/javascript">
-  // Global variable to store the classifier
+
+
+// Copyright (c) 2019 ml5
+//
+// This software is released under the MIT License.
+// https://opensource.org/licenses/MIT
+
+/* ===
+ml5 Example
+Webcam Image Classification using a pre-trained customized model and p5.js
+// Copyright (c) 2019 ml5
+//
+// This software is released under the MIT License.
+// https://opensource.org/licenses/MIT
+
+/* ===
+ml5 Example
+Webcam Image Classification using a pre-trained customized model and p5.js
+This example uses p5 preload function to create the classifier
+=== */
+
+// Global variable to store the classifier
 let classifier;
 
-// Label
-let label = 'listening...';
-let confidence = 0;
+// Label (start by showing listening)
+let label = "listening";
 
 // Teachable Machine model URL:
-let soundModel = 'https://teachablemachine.withgoogle.com/models/3_zf6X3GA/';
+let soundModelURL = 'https://teachablemachine.withgoogle.com/models/3_zf6X3GA/model.json';
 
 
 function preload() {
   // Load the model
-  classifier = ml5.soundClassifier(soundModel + 'model.json');
+  classifier = ml5.soundClassifier(soundModelURL);
 }
 
 function setup() {
@@ -28,12 +43,12 @@ function setup() {
 }
 
 function draw() {
-  background(255);
+  background(0);
   // Draw the label in the canvas
-  fill(0);
-  textSize(30);
+  fill(255);
+  textSize(32);
   textAlign(CENTER, CENTER);
-  text('This clip is: ' + (confidence * 100).toFixed(2) + '% Similar to "blank" ', width / 2, height / 2 + 20);
+  text(label, width / 2, height / 2);
 }
 
 
@@ -44,9 +59,9 @@ function gotResult(error, results) {
     return;
   }
   // The results are in an array ordered by confidence.
-  // console.log(results[0]);
+  console.log(results[0]);
   label = results[0].label;
-  confidence = results[0].confidence;
 }
-</script>
+//Need to figure out how to display confidence, probably create a new variable = results[0]x100
+
 
