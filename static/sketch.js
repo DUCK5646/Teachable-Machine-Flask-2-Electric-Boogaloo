@@ -12,7 +12,7 @@ let label = 'listening...';
 let confidence = 0;
 
 // Teachable Machine model URL:
-let soundModel = 'https://teachablemachine.withgoogle.com/models/o4CVgbEYu/';
+let soundModel = 'https://teachablemachine.withgoogle.com/models/3_zf6X3GA/';
 
 
 function preload() {
